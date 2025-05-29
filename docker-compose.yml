@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - BAP_ID=marblex-bap-preprod.marblex.ai
+      - BAP_URI=https://evolving-fawn-cleanly.ngrok-free.app/v1
+      - BPP_URI=https://dev-automation.ondc.org/api-service/ONDC:TRV11/2.0.0/seller
+    restart: unless-stopped 
