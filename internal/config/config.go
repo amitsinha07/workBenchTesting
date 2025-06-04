@@ -20,9 +20,7 @@ func Load() (*Config, error) {
 	_ = godotenv.Load()
 
 	return &Config{
-		Port:   getEnv("PORT", "3000"),
-		BapID:  getEnv("BAP_ID", "marblex-bap-preprod.marblex.ai"),
-		BapURI: getEnv("BAP_URI", "https://evolving-fawn-cleanly.ngrok-free.app/v1"),
+		Port:   getEnv("PORT", "8080"),
 		BppURI: getEnv("BPP_URI", "https://dev-automation.ondc.org/api-service/ONDC:TRV11/2.0.0/seller"),
 	}, nil
 }

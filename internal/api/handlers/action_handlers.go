@@ -138,3 +138,23 @@ func (h *ActionHandlers) HandleCancel(c *fiber.Ctx) error {
 		"message": "Cancel request forwarded successfully",
 	})
 }
+
+// HandleUpdate handles the update request
+func (h *ActionHandlers) HandleUpdate(c *fiber.Ctx) error {
+	var request map[string]interface{}
+	if err := c.BodyParser(&request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request format",
+		})
+	}
+
+	if err := h.ondcService.ForwardUpdateRequest(request); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to forward update request",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Update request forwarded successfully",
+	})
+}

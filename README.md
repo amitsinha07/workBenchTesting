@@ -102,6 +102,7 @@ All endpoints are prefixed with `/v1`
 - POST `/confirm` - Confirm an order
 - POST `/status` - Check order status
 - POST `/cancel` - Cancel an order
+- POST `/update` - Update an order
 
 ### Callback Endpoints:
 - POST `/on_search` - Receive search results
@@ -110,6 +111,7 @@ All endpoints are prefixed with `/v1`
 - POST `/on_confirm` - Receive order confirmation
 - POST `/on_status` - Receive status update
 - POST `/on_cancel` - Receive cancellation confirmation
+- POST `/on_update` - Receive update confirmation
 
 ## Testing
 

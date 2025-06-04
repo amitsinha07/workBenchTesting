@@ -157,3 +157,27 @@ func (h *CallbackHandlers) HandleOnCancel(c *fiber.Ctx) error {
 		},
 	})
 }
+
+// HandleOnUpdate handles the on_update callback
+func (h *CallbackHandlers) HandleOnUpdate(c *fiber.Ctx) error {
+	var request map[string]interface{}
+	if err := c.BodyParser(&request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": fiber.Map{
+				"ack": fiber.Map{
+					"status": "NACK",
+				},
+			},
+		})
+	}
+
+	log.Printf("Received on_update callback: %+v", request)
+
+	return c.JSON(fiber.Map{
+		"message": fiber.Map{
+			"ack": fiber.Map{
+				"status": "ACK",
+			},
+		},
+	})
+}
