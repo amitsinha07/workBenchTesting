@@ -181,3 +181,27 @@ func (h *CallbackHandlers) HandleOnUpdate(c *fiber.Ctx) error {
 		},
 	})
 }
+
+// HandleOnTrack handles the on_track callback
+func (h *CallbackHandlers) HandleOnTrack(c *fiber.Ctx) error {
+	var request map[string]interface{}
+	if err := c.BodyParser(&request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": fiber.Map{
+				"ack": fiber.Map{
+					"status": "NACK",
+				},
+			},
+		})
+	}
+
+	log.Printf("Received on_track callback: %+v", request)
+
+	return c.JSON(fiber.Map{
+		"message": fiber.Map{
+			"ack": fiber.Map{
+				"status": "ACK",
+			},
+		},
+	})
+}

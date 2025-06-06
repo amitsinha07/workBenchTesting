@@ -21,7 +21,7 @@ func Load() (*Config, error) {
 
 	return &Config{
 		Port:   getEnv("PORT", "8080"),
-		BppURI: getEnv("BPP_URI", "https://dev-automation.ondc.org/api-service/ONDC:TRV11/2.0.0/seller"),
+		BppURI: getEnv("BPP_URI", "https://dev-automation.ondc.org/api-service/ONDC:TRV10/2.1.0/seller"),
 	}, nil
 }
 

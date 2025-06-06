@@ -24,6 +24,7 @@ func SetupRoutes(app *fiber.App, cfg *config.Config) {
 	v1.Post("/status", actionHandlers.HandleStatus)
 	v1.Post("/cancel", actionHandlers.HandleCancel)
 	v1.Post("/update", actionHandlers.HandleUpdate)
+	v1.Post("/track", actionHandlers.HandleTrack)
 
 	// Callback endpoints
 	v1.Post("/on_search", callbackHandlers.HandleOnSearch)
@@ -33,4 +34,5 @@ func SetupRoutes(app *fiber.App, cfg *config.Config) {
 	v1.Post("/on_status", callbackHandlers.HandleOnStatus)
 	v1.Post("/on_cancel", callbackHandlers.HandleOnCancel)
 	v1.Post("/on_update", callbackHandlers.HandleOnUpdate)
+	v1.Post("/on_track", callbackHandlers.HandleOnTrack)
 }

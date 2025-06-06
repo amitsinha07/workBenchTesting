@@ -158,3 +158,23 @@ func (h *ActionHandlers) HandleUpdate(c *fiber.Ctx) error {
 		"message": "Update request forwarded successfully",
 	})
 }
+
+// HandleTrack handles the track request
+func (h *ActionHandlers) HandleTrack(c *fiber.Ctx) error {
+	var request map[string]interface{}
+	if err := c.BodyParser(&request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request format",
+		})
+	}
+
+	if err := h.ondcService.ForwardTrackRequest(request); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to forward track request",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Track request forwarded successfully",
+	})
+}

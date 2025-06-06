@@ -84,3 +84,8 @@ func (s *OndcService) ForwardCancelRequest(req interface{}) error {
 func (s *OndcService) ForwardUpdateRequest(req interface{}) error {
 	return s.forwardRequest("/update", req)
 }
+
+// ForwardTrackRequest forwards the track request to BPP
+func (s *OndcService) ForwardTrackRequest(req interface{}) error {
+	return s.forwardRequest("/track", req)
+}
