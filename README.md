@@ -2,6 +2,19 @@
 
 This is a dummy implementation of an ONDC (Open Network for Digital Commerce) application that supports both Buyer Application Platform (BAP) and Seller Application Platform (SAP) functionality in Go. It implements the basic ONDC protocol APIs for both buyer and seller applications.
 
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+- [API Endpoints](#api-endpoints)
+- [Testing](#testing)
+  - [Postman Collections](#postman-collections)
+  - [cURL Examples](#curl-examples)
+- [Development](#development)
+- [Contributing](#contributing)
+
 ## Project Structure
 
 ```
@@ -17,6 +30,12 @@ This is a dummy implementation of an ONDC (Open Network for Digital Commerce) ap
 │   ├── models/         # Data models
 │   └── config/         # Configuration
 ├── pkg/                # Public packages
+├── postman-collections/ # Postman API testing collections
+│   ├── README.md       # Detailed testing documentation
+│   ├── buyer-action-apis.json    # Buyer action endpoints
+│   ├── buyer-callback-apis.json  # Buyer callback endpoints
+│   ├── seller-action-apis.json   # Seller action endpoints
+│   └── seller-callback-apis.json # Seller callback endpoints
 ├── Dockerfile         # Docker build instructions
 ├── docker-compose.yml # Docker compose configuration
 └── README.md
@@ -158,7 +177,8 @@ We provide comprehensive Postman collections for testing all endpoints. Import t
 - **`seller-action-apis.json`** - Seller action endpoints for processing buyer requests
 - **`seller-callback-apis.json`** - Seller callback endpoints for forwarding responses
 
-See `postman-collections/README.md` for detailed usage instructions.
+📖 **For detailed usage instructions, sample workflows, and environment setup, see:**  
+**[Postman Collections Documentation](./postman-collections/README.md)**
 
 ### cURL Examples
 
