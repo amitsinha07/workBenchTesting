@@ -1,6 +1,6 @@
-# ONDC Buyer App in Go
+# ONDC Buyer & Seller App in Go
 
-This is a dummy implementation of an ONDC (Open Network for Digital Commerce) Buyer Application Platform (BAP) in Go. It implements the basic ONDC protocol APIs for a buyer application.
+This is a dummy implementation of an ONDC (Open Network for Digital Commerce) application that supports both Buyer Application Platform (BAP) and Seller Application Platform (SAP) functionality in Go. It implements the basic ONDC protocol APIs for both buyer and seller applications.
 
 ## Project Structure
 
@@ -24,9 +24,13 @@ This is a dummy implementation of an ONDC (Open Network for Digital Commerce) Bu
 
 ## Features
 
-- Basic ONDC protocol implementation
-- Action endpoints (search, select, init, confirm, status, cancel)
-- Callback endpoints (on_search, on_select, on_init, on_confirm, on_status, on_cancel)
+- Complete ONDC protocol implementation for both buyer and seller platforms
+- **Buyer Application Platform (BAP) features:**
+  - Action endpoints (search, select, init, confirm, status, cancel, update, track)
+  - Callback endpoints (on_search, on_select, on_init, on_confirm, on_status, on_cancel, on_update, on_track)
+- **Seller Application Platform (SAP) features:**
+  - Request processing endpoints (search, select, init, confirm, status, cancel, update, track)
+  - Callback forwarding endpoints (on_search, on_select, on_init, on_confirm, on_status, on_cancel, on_update, on_track)
 - Environment-based configuration
 - Request validation and error handling
 - Structured logging
@@ -55,6 +59,10 @@ BAP_ID=marblex-bap-preprod.marblex.ai
 BAP_URI=https://evolving-fawn-cleanly.ngrok-free.app/v1
 BPP_URI=https://dev-automation.ondc.org/api-service/ONDC:TRV11/2.0.0/seller
 ```
+
+Note: 
+- `BAP_ID` and `BAP_URI` are used for buyer application functionality
+- `BPP_URI` is used for seller callback forwarding
 
 3. Install dependencies:
 ```bash
@@ -95,31 +103,91 @@ docker-compose down
 
 All endpoints are prefixed with `/v1`
 
-### Action Endpoints:
-- POST `/search` - Initiate a search request
-- POST `/select` - Select an item from search results
-- POST `/init` - Initialize an order
-- POST `/confirm` - Confirm an order
-- POST `/status` - Check order status
-- POST `/cancel` - Cancel an order
-- POST `/update` - Update an order
+### Buyer Endpoints
 
-### Callback Endpoints:
-- POST `/on_search` - Receive search results
-- POST `/on_select` - Receive selection confirmation
-- POST `/on_init` - Receive initialization confirmation
-- POST `/on_confirm` - Receive order confirmation
-- POST `/on_status` - Receive status update
-- POST `/on_cancel` - Receive cancellation confirmation
-- POST `/on_update` - Receive update confirmation
+#### Action Endpoints:
+- POST `/buyer/search` - Initiate a search request
+- POST `/buyer/select` - Select an item from search results
+- POST `/buyer/init` - Initialize an order
+- POST `/buyer/confirm` - Confirm an order
+- POST `/buyer/status` - Check order status
+- POST `/buyer/cancel` - Cancel an order
+- POST `/buyer/update` - Update an order
+- POST `/buyer/track` - Track an order
+
+#### Callback Endpoints:
+- POST `/buyer/on_search` - Receive search results
+- POST `/buyer/on_select` - Receive selection confirmation
+- POST `/buyer/on_init` - Receive initialization confirmation
+- POST `/buyer/on_confirm` - Receive order confirmation
+- POST `/buyer/on_status` - Receive status update
+- POST `/buyer/on_cancel` - Receive cancellation confirmation
+- POST `/buyer/on_update` - Receive update confirmation
+- POST `/buyer/on_track` - Receive tracking updates
+
+### Seller Endpoints
+
+#### Action Endpoints:
+- POST `/seller/search` - Process search requests from buyers
+- POST `/seller/select` - Process select requests from buyers
+- POST `/seller/init` - Process initialization requests from buyers
+- POST `/seller/confirm` - Process confirmation requests from buyers
+- POST `/seller/status` - Process status requests from buyers
+- POST `/seller/cancel` - Process cancellation requests from buyers
+- POST `/seller/update` - Process update requests from buyers
+- POST `/seller/track` - Process tracking requests from buyers
+
+#### Callback Endpoints:
+- POST `/seller/on_search` - Forward search results to buyer
+- POST `/seller/on_select` - Forward selection confirmation to buyer
+- POST `/seller/on_init` - Forward initialization confirmation to buyer
+- POST `/seller/on_confirm` - Forward order confirmation to buyer
+- POST `/seller/on_status` - Forward status update to buyer
+- POST `/seller/on_cancel` - Forward cancellation confirmation to buyer
+- POST `/seller/on_update` - Forward update confirmation to buyer
+- POST `/seller/on_track` - Forward tracking updates to buyer
 
 ## Testing
 
-You can test the endpoints using curl:
+### Postman Collections
+
+We provide comprehensive Postman collections for testing all endpoints. Import them from the `postman-collections/` folder:
+
+- **`buyer-action-apis.json`** - Buyer action endpoints (search, select, init, confirm, etc.)
+- **`buyer-callback-apis.json`** - Buyer callback endpoints (on_search, on_select, etc.)
+- **`seller-action-apis.json`** - Seller action endpoints for processing buyer requests
+- **`seller-callback-apis.json`** - Seller callback endpoints for forwarding responses
+
+See `postman-collections/README.md` for detailed usage instructions.
+
+### cURL Examples
+
+You can also test the endpoints using curl:
+
+#### Buyer Endpoints
 
 ```bash
-# Test search callback
-curl -X POST http://localhost:3000/v1/on_search \
+# Test buyer search callback
+curl -X POST http://localhost:3000/v1/buyer/on_search \
+  -H "Content-Type: application/json" \
+  -d '{"context": {"transaction_id": "123"}, "message": {"catalog": {}}}'
+
+# Test buyer search action
+curl -X POST http://localhost:3000/v1/buyer/search \
+  -H "Content-Type: application/json" \
+  -d '{"context": {"transaction_id": "123"}, "message": {"intent": {}}}'
+```
+
+#### Seller Endpoints
+
+```bash
+# Test seller search processing
+curl -X POST http://localhost:3000/v1/seller/search \
+  -H "Content-Type: application/json" \
+  -d '{"context": {"transaction_id": "123"}, "message": {"intent": {}}}'
+
+# Test seller callback forwarding
+curl -X POST http://localhost:3000/v1/seller/on_search \
   -H "Content-Type: application/json" \
   -d '{"context": {"transaction_id": "123"}, "message": {"catalog": {}}}'
 ```

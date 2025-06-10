@@ -12,27 +12,51 @@ func SetupRoutes(app *fiber.App, cfg *config.Config) {
 	// Create handlers
 	actionHandlers := handlers.NewActionHandlers(cfg)
 	callbackHandlers := handlers.NewCallbackHandlers()
+	sellerHandlers := handlers.NewSellerHandlers(cfg)
+	sellerCallbackHandlers := handlers.NewSellerCallbackHandlers(cfg)
 
 	// API v1 routes
 	v1 := app.Group("/v1")
 
-	// Action endpoints
-	v1.Post("/search", actionHandlers.HandleSearch)
-	v1.Post("/select", actionHandlers.HandleSelect)
-	v1.Post("/init", actionHandlers.HandleInit)
-	v1.Post("/confirm", actionHandlers.HandleConfirm)
-	v1.Post("/status", actionHandlers.HandleStatus)
-	v1.Post("/cancel", actionHandlers.HandleCancel)
-	v1.Post("/update", actionHandlers.HandleUpdate)
-	v1.Post("/track", actionHandlers.HandleTrack)
+	// Buyer endpoints
+	buyer := v1.Group("/buyer")
+	buyer.Post("/search", actionHandlers.HandleSearch)
+	buyer.Post("/select", actionHandlers.HandleSelect)
+	buyer.Post("/init", actionHandlers.HandleInit)
+	buyer.Post("/confirm", actionHandlers.HandleConfirm)
+	buyer.Post("/status", actionHandlers.HandleStatus)
+	buyer.Post("/cancel", actionHandlers.HandleCancel)
+	buyer.Post("/update", actionHandlers.HandleUpdate)
+	buyer.Post("/track", actionHandlers.HandleTrack)
 
-	// Callback endpoints
-	v1.Post("/on_search", callbackHandlers.HandleOnSearch)
-	v1.Post("/on_select", callbackHandlers.HandleOnSelect)
-	v1.Post("/on_init", callbackHandlers.HandleOnInit)
-	v1.Post("/on_confirm", callbackHandlers.HandleOnConfirm)
-	v1.Post("/on_status", callbackHandlers.HandleOnStatus)
-	v1.Post("/on_cancel", callbackHandlers.HandleOnCancel)
-	v1.Post("/on_update", callbackHandlers.HandleOnUpdate)
-	v1.Post("/on_track", callbackHandlers.HandleOnTrack)
+	// Buyer callback endpoints
+	buyer.Post("/on_search", callbackHandlers.HandleOnSearch)
+	buyer.Post("/on_select", callbackHandlers.HandleOnSelect)
+	buyer.Post("/on_init", callbackHandlers.HandleOnInit)
+	buyer.Post("/on_confirm", callbackHandlers.HandleOnConfirm)
+	buyer.Post("/on_status", callbackHandlers.HandleOnStatus)
+	buyer.Post("/on_cancel", callbackHandlers.HandleOnCancel)
+	buyer.Post("/on_update", callbackHandlers.HandleOnUpdate)
+	buyer.Post("/on_track", callbackHandlers.HandleOnTrack)
+
+	// Seller endpoints (mirror of buyer endpoints)
+	seller := v1.Group("/seller")
+	seller.Post("/search", sellerHandlers.HandleSearch)
+	seller.Post("/select", sellerHandlers.HandleSelect)
+	seller.Post("/init", sellerHandlers.HandleInit)
+	seller.Post("/confirm", sellerHandlers.HandleConfirm)
+	seller.Post("/status", sellerHandlers.HandleStatus)
+	seller.Post("/cancel", sellerHandlers.HandleCancel)
+	seller.Post("/update", sellerHandlers.HandleUpdate)
+	seller.Post("/track", sellerHandlers.HandleTrack)
+
+	// Seller callback endpoints
+	seller.Post("/on_search", sellerCallbackHandlers.HandleOnSearch)
+	seller.Post("/on_select", sellerCallbackHandlers.HandleOnSelect)
+	seller.Post("/on_init", sellerCallbackHandlers.HandleOnInit)
+	seller.Post("/on_confirm", sellerCallbackHandlers.HandleOnConfirm)
+	seller.Post("/on_status", sellerCallbackHandlers.HandleOnStatus)
+	seller.Post("/on_cancel", sellerCallbackHandlers.HandleOnCancel)
+	seller.Post("/on_update", sellerCallbackHandlers.HandleOnUpdate)
+	seller.Post("/on_track", sellerCallbackHandlers.HandleOnTrack)
 }

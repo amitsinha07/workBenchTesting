@@ -19,7 +19,7 @@ func main() {
 	srv.SetupRoutes()
 
 	// Start server
-	log.Printf("Starting ONDC Buyer App server on port %s", cfg.Port)
+	log.Printf("Starting ONDC Mobility App server on port %s", cfg.Port)
 	if err := srv.Start(cfg.Port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}

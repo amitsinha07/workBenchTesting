@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "seller-action-apis",
+		"name": "ONDC Seller Action APIs",
+		"description": "Collection for testing ONDC seller action endpoints (search, select, init, confirm, status, cancel, update, track)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Seller Search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"search\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-search\",\n        \"message_id\": \"msg-123-search\",\n        \"timestamp\": \"2024-03-20T10:00:00.000Z\"\n    },\n    \"message\": {\n        \"intent\": {\n            \"fulfillment\": {\n                \"start\": {\n                    \"location\": {\n                        \"gps\": \"12.9716,77.5946\",\n                        \"address\": {\n                            \"full\": \"MG Road, Bangalore\"\n                        }\n                    }\n                },\n                \"end\": {\n                    \"location\": {\n                        \"gps\": \"12.9352,77.6245\",\n                        \"address\": {\n                            \"full\": \"Indiranagar, Bangalore\"\n                        }\n                    }\n                }\n            }\n        }\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/search",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"search"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Select",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"select\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-select\",\n        \"message_id\": \"msg-123-select\",\n        \"timestamp\": \"2024-03-20T10:05:00.000Z\"\n    },\n    \"message\": {\n        \"order\": {\n            \"provider\": {\n                \"id\": \"mobility-provider-1\"\n            },\n            \"items\": [\n                {\n                    \"id\": \"taxi-service-1\",\n                    \"quantity\": {\n                        \"count\": 1\n                    }\n                }\n            ]\n        }\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/select",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"select"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Init",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"init\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-init\",\n        \"message_id\": \"msg-123-init\",\n        \"timestamp\": \"2024-03-20T10:10:00.000Z\"\n    },\n    \"message\": {\n        \"order\": {\n            \"provider\": {\n                \"id\": \"mobility-provider-1\"\n            },\n            \"items\": [\n                {\n                    \"id\": \"taxi-service-1\",\n                    \"quantity\": {\n                        \"count\": 1\n                    }\n                }\n            ],\n            \"billing\": {\n                \"name\": \"John Doe\",\n                \"phone\": \"9876543210\",\n                \"email\": \"john.doe@example.com\"\n            },\n            \"fulfillment\": {\n                \"start\": {\n                    \"location\": {\n                        \"gps\": \"12.9716,77.5946\",\n                        \"address\": {\n                            \"full\": \"MG Road, Bangalore\"\n                        }\n                    }\n                },\n                \"end\": {\n                    \"location\": {\n                        \"gps\": \"12.9352,77.6245\",\n                        \"address\": {\n                            \"full\": \"Indiranagar, Bangalore\"\n                        }\n                    }\n                }\n            }\n        }\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/init",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"init"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Confirm",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"confirm\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-confirm\",\n        \"message_id\": \"msg-123-confirm\",\n        \"timestamp\": \"2024-03-20T10:15:00.000Z\"\n    },\n    \"message\": {\n        \"order\": {\n            \"provider\": {\n                \"id\": \"mobility-provider-1\"\n            },\n            \"items\": [\n                {\n                    \"id\": \"taxi-service-1\",\n                    \"quantity\": {\n                        \"count\": 1\n                    }\n                }\n            ],\n            \"billing\": {\n                \"name\": \"John Doe\",\n                \"phone\": \"9876543210\",\n                \"email\": \"john.doe@example.com\"\n            },\n            \"fulfillment\": {\n                \"start\": {\n                    \"location\": {\n                        \"gps\": \"12.9716,77.5946\",\n                        \"address\": {\n                            \"full\": \"MG Road, Bangalore\"\n                        }\n                    }\n                },\n                \"end\": {\n                    \"location\": {\n                        \"gps\": \"12.9352,77.6245\",\n                        \"address\": {\n                            \"full\": \"Indiranagar, Bangalore\"\n                        }\n                    }\n                }\n            },\n            \"payment\": {\n                \"type\": \"POST-FULFILLMENT\"\n            }\n        }\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/confirm",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"confirm"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"status\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-status\",\n        \"message_id\": \"msg-123-status\",\n        \"timestamp\": \"2024-03-20T10:20:00.000Z\"\n    },\n    \"message\": {\n        \"order_id\": \"order-123\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"status"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Cancel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"cancel\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-cancel\",\n        \"message_id\": \"msg-123-cancel\",\n        \"timestamp\": \"2024-03-20T10:25:00.000Z\"\n    },\n    \"message\": {\n        \"order_id\": \"order-123\",\n        \"cancellation_reason_id\": \"CANCEL-BY-USER\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/cancel",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"cancel"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"update\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-update\",\n        \"message_id\": \"msg-123-update\",\n        \"timestamp\": \"2024-03-20T10:30:00.000Z\"\n    },\n    \"message\": {\n        \"order\": {\n            \"id\": \"order-123\",\n            \"update_target\": \"fulfillment\",\n            \"fulfillment\": {\n                \"start\": {\n                    \"time\": {\n                        \"range\": {\n                            \"start\": \"2024-03-20T10:45:00.000Z\",\n                            \"end\": \"2024-03-20T10:55:00.000Z\"\n                        }\n                    }\n                }\n            }\n        }\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/update",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"update"
+					]
+				}
+			}
+		},
+		{
+			"name": "Seller Track",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"context\": {\n        \"domain\": \"nic2004:60221\",\n        \"country\": \"IND\",\n        \"city\": \"std:080\",\n        \"action\": \"track\",\n        \"core_version\": \"1.1.0\",\n        \"bap_id\": \"buyer-app-1\",\n        \"bap_uri\": \"http://localhost:3000/v1/buyer\",\n        \"bpp_id\": \"seller-app-1\",\n        \"bpp_uri\": \"http://localhost:3000/v1/seller\",\n        \"transaction_id\": \"txn-123-track\",\n        \"message_id\": \"msg-123-track\",\n        \"timestamp\": \"2024-03-20T10:35:00.000Z\"\n    },\n    \"message\": {\n        \"order_id\": \"order-123\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/seller/track",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"seller",
+						"track"
+					]
+				}
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+} 

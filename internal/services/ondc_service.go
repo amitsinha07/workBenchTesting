@@ -33,9 +33,16 @@ func (s *OndcService) forwardRequest(endpoint string, req interface{}) error {
 		return err
 	}
 
+	// Construct the full URL
+	fullURL := s.config.BppURI + endpoint
+
+	// Log the BPP URI before forwarding
+	log.Printf("Forwarding %s request to BPP URI: %s", endpoint, fullURL)
+
 	// Create and send request
-	resp, err := s.httpClient.Post(s.config.BppURI+endpoint, "application/json", bytes.NewBuffer(jsonData))
+	resp, err := s.httpClient.Post(fullURL, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
+		log.Printf("Error forwarding request to %s: %v", fullURL, err)
 		return err
 	}
 	defer resp.Body.Close()
@@ -46,7 +53,7 @@ func (s *OndcService) forwardRequest(endpoint string, req interface{}) error {
 		return err
 	}
 
-	log.Printf("Response from BPP for %s: %s", endpoint, string(respBody))
+	log.Printf("Response from BPP %s: %s", fullURL, string(respBody))
 	return nil
 }
 
