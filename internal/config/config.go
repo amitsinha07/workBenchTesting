@@ -20,7 +20,7 @@ func Load() (*Config, error) {
 	_ = godotenv.Load()
 
 	return &Config{
-		Port:   getEnv("PORT", "3000"),
+		Port:   getEnv("PORT", "4000"),
 		BppURI: getEnv("BPP_URI", "https://dev-automation.ondc.org/api-service/ONDC:TRV10/2.1.0/seller"),
 	}, nil
 }

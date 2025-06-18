@@ -3,6 +3,7 @@ package handlers
 import (
 	"ondc-buyer-app/internal/config"
 	"ondc-buyer-app/internal/services"
+	"ondc-buyer-app/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -25,6 +26,7 @@ func (h *SellerHandlers) createACKResponse() fiber.Map {
 		"message": fiber.Map{
 			"ack": fiber.Map{
 				"status": "ACK",
+				"number": utils.GenerateACKNumber(),
 			},
 		},
 	}
@@ -36,6 +38,7 @@ func (h *SellerHandlers) createNACKResponse(errorMsg string) fiber.Map {
 		"message": fiber.Map{
 			"ack": fiber.Map{
 				"status": "NACK",
+				"number": utils.GenerateACKNumber(),
 			},
 		},
 		"error": fiber.Map{

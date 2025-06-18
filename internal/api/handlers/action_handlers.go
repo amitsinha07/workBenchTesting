@@ -3,6 +3,7 @@ package handlers
 import (
 	"ondc-buyer-app/internal/config"
 	"ondc-buyer-app/internal/services"
+	"ondc-buyer-app/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,6 +17,35 @@ type ActionHandlers struct {
 func NewActionHandlers(cfg *config.Config) *ActionHandlers {
 	return &ActionHandlers{
 		ondcService: services.NewOndcService(cfg),
+	}
+}
+
+// createACKResponse creates a standard ONDC ACK response
+func (h *ActionHandlers) createACKResponse() fiber.Map {
+	return fiber.Map{
+		"message": fiber.Map{
+			"ack": fiber.Map{
+				"status": "ACK",
+				"number": utils.GenerateACKNumber(),
+			},
+		},
+	}
+}
+
+// createNACKResponse creates a standard ONDC NACK response with error
+func (h *ActionHandlers) createNACKResponse(errorMsg string) fiber.Map {
+	return fiber.Map{
+		"message": fiber.Map{
+			"ack": fiber.Map{
+				"status": "NACK",
+				"number": utils.GenerateACKNumber(),
+			},
+		},
+		"error": fiber.Map{
+			"type":    "CORE-ERROR",
+			"code":    "10001",
+			"message": errorMsg,
+		},
 	}
 }
 
