@@ -73,15 +73,37 @@ cd ondc-buyer-app
 
 2. Set up environment variables:
 ```env
+# Server Configuration
 PORT=3000
 BAP_ID=marblex-bap-preprod.marblex.ai
 BAP_URI=https://evolving-fawn-cleanly.ngrok-free.app/v1
 BPP_URI=https://dev-automation.ondc.org/api-service/ONDC:TRV11/2.0.0/seller
+
+# Authentication Configuration (ONDC Signature)
+PRIVATE_KEY=your_base64_encoded_private_key_here
+PUBLIC_KEY=your_base64_encoded_public_key_here
+SUBSCRIBER_ID=buyer-app.ondc.org
+UNIQUE_KEY_ID=207
 ```
 
-Note: 
+**Generate ED25519 keys for authentication:**
+```bash
+# Generate private key
+openssl genpkey -algorithm Ed25519 -out private_key.pem
+
+# Generate public key  
+openssl pkey -in private_key.pem -pubout -out public_key.pem
+
+# Convert to base64 for environment variables
+echo "PRIVATE_KEY=$(openssl pkey -in private_key.pem -raw -outform DER | base64)"
+echo "PUBLIC_KEY=$(openssl pkey -pubin -in public_key.pem -raw -outform DER | base64)"
+```
+
+**Environment Variables Notes:**
 - `BAP_ID` and `BAP_URI` are used for buyer application functionality
 - `BPP_URI` is used for seller callback forwarding
+- `PRIVATE_KEY` and `PUBLIC_KEY` are required for ONDC signature authentication
+- `SUBSCRIBER_ID` and `UNIQUE_KEY_ID` identify your application in the ONDC network
 
 3. Install dependencies:
 ```bash
@@ -214,14 +236,29 @@ curl -X POST http://localhost:3000/v1/seller/on_search \
 
 ## Development
 
-This is a basic implementation for demonstration purposes. For production use, you should:
+### Authentication Features
 
-1. Implement proper request signing using ONDC's cryptographic requirements
-2. Add proper error handling and logging
-3. Implement complete request validation
-4. Add database integration for storing transactions
-5. Implement proper security measures
-6. Add tests
+This implementation includes **automatic ONDC authentication**:
+
+✅ **Automatic header generation** - Auth headers are automatically added to all outgoing buyer action APIs  
+✅ **Optional signature verification** - Incoming callback requests are verified if auth headers are present  
+✅ **ONDC v1.1.0 compliant** - Uses ED25519 signatures with BLAKE-512 hashing  
+✅ **Environment-based configuration** - Easy setup with environment variables  
+
+For detailed authentication documentation, see: **[Authentication Documentation](./docs/authentication.md)**
+
+### Production Considerations
+
+For production deployment, consider implementing:
+
+1. ✅ ~~Proper request signing using ONDC's cryptographic requirements~~ (Already implemented)
+2. Enhanced error handling and monitoring
+3. Complete request validation and schema enforcement
+4. Database integration for storing transactions and audit logs
+5. Rate limiting and security hardening
+6. Comprehensive test coverage
+7. Key rotation and secrets management
+8. Health checks and observability
 
 ## Contributing
 

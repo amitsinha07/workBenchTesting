@@ -8,8 +8,15 @@ services:
     ports:
       - "3000:3000"
     environment:
+      # Server configuration
       - PORT=3000
-      - BAP_ID=marblex-bap-preprod.marblex.ai
+      - BAP_ID=
       - BAP_URI=https://evolving-fawn-cleanly.ngrok-free.app/v1
       - BPP_URI=https://dev-automation.ondc.org/api-service/ONDC:TRV11/2.0.0/seller
+      
+      # Authentication configuration (ONDC Signature)
+      - PRIVATE_KEY=${PRIVATE_KEY:-}
+      - PUBLIC_KEY=${PUBLIC_KEY:-}
+      - SUBSCRIBER_ID=${SUBSCRIBER_ID:-buyer-app.ondc.org}
+      - UNIQUE_KEY_ID=${UNIQUE_KEY_ID:-207}
     restart: unless-stopped 

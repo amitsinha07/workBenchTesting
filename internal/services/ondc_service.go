@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"ondc-buyer-app/internal/config"
+	"ondc-buyer-app/internal/middleware"
+	"strings"
 	"time"
 )
 
@@ -26,7 +28,19 @@ func NewOndcService(cfg *config.Config) *OndcService {
 	}
 }
 
-// forwardRequest is a helper function to forward requests to BPP
+// maskSignature masks the signature part of authorization header for security
+func maskSignature(authHeader string) string {
+	if strings.Contains(authHeader, "signature=") {
+		parts := strings.Split(authHeader, "signature=")
+		if len(parts) > 1 {
+			// Show first part + masked signature
+			return parts[0] + "signature=***MASKED***"
+		}
+	}
+	return authHeader
+}
+
+// forwardRequest is a helper function to forward requests to BPP with auth headers
 func (s *OndcService) forwardRequest(endpoint string, req interface{}) error {
 	jsonData, err := json.Marshal(req)
 	if err != nil {
@@ -39,8 +53,46 @@ func (s *OndcService) forwardRequest(endpoint string, req interface{}) error {
 	// Log the BPP URI before forwarding
 	log.Printf("Forwarding %s request to BPP URI: %s", endpoint, fullURL)
 
-	// Create and send request
-	resp, err := s.httpClient.Post(fullURL, "application/json", bytes.NewBuffer(jsonData))
+	// Create HTTP request
+	httpReq, err := http.NewRequest("POST", fullURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		log.Printf("Error creating request to %s: %v", fullURL, err)
+		return err
+	}
+
+	// Add authentication headers using the middleware function
+	headers, err := middleware.AddAuthHeaderToRequest(jsonData)
+	if err != nil {
+		log.Printf("Error generating auth headers for %s: %v", endpoint, err)
+		// Continue without auth headers - you may want to make this more strict
+	} else {
+		// Add all headers from the middleware
+		for key, value := range headers {
+			httpReq.Header.Set(key, value)
+		}
+		log.Printf("Added authentication headers for request to %s", endpoint)
+	}
+
+	// Log complete request details
+	log.Printf("=== OUTGOING REQUEST DETAILS ===")
+	log.Printf("Method: %s", httpReq.Method)
+	log.Printf("URL: %s", httpReq.URL.String())
+	log.Printf("Headers:")
+	for name, values := range httpReq.Header {
+		for _, value := range values {
+			// Don't log the full signature for security, just show it exists
+			if name == "Authorization" {
+				log.Printf("  %s: %s", name, maskSignature(value))
+			} else {
+				log.Printf("  %s: %s", name, value)
+			}
+		}
+	}
+	log.Printf("Request Body: %s", string(jsonData))
+	log.Printf("=== END REQUEST DETAILS ===")
+
+	// Send request
+	resp, err := s.httpClient.Do(httpReq)
 	if err != nil {
 		log.Printf("Error forwarding request to %s: %v", fullURL, err)
 		return err
@@ -53,7 +105,19 @@ func (s *OndcService) forwardRequest(endpoint string, req interface{}) error {
 		return err
 	}
 
-	log.Printf("Response from BPP %s: %s", fullURL, string(respBody))
+	// Log complete response details
+	log.Printf("=== INCOMING RESPONSE DETAILS ===")
+	log.Printf("Status Code: %d", resp.StatusCode)
+	log.Printf("Status: %s", resp.Status)
+	log.Printf("Response Headers:")
+	for name, values := range resp.Header {
+		for _, value := range values {
+			log.Printf("  %s: %s", name, value)
+		}
+	}
+	log.Printf("Response Body: %s", string(respBody))
+	log.Printf("=== END RESPONSE DETAILS ===")
+
 	return nil
 }
 
